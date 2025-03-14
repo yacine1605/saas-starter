@@ -5,7 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useActionState } from "react";
 import { User } from "@/lib/db/schema";
-import { removeTeamMember } from "@/app/(login)/actions";
+//import { removeTeamMember } from "@/app/(login)/actions";
 import { InviteTeamMember } from "./invite-team";
 
 type ActionState = {
@@ -14,11 +14,6 @@ type ActionState = {
 };
 
 export function Settings() {
-  const [removeState, removeAction, isRemovePending] = useActionState<
-    ActionState,
-    FormData
-  >(removeTeamMember, { error: "", success: "" });
-
   const getUserDisplayName = (user: Pick<User, "id" | "nom" | "email">) => {
     return user.nom || user.email || "Unknown User";
   };

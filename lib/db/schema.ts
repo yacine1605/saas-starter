@@ -69,7 +69,7 @@ export const sessionsUtilisateur = pgTable("sessions", {
 export const livreurTable = pgTable("livreur", {
   id: integer("id").primaryKey(),
   nomComplet: text().notNull(),
-  phone: text().notNull(),
+  phone: text().notNull().unique(),
 });
 export const facturesTable = pgTable(
   "factures",
@@ -79,9 +79,9 @@ export const facturesTable = pgTable(
       .notNull()
       .references(() => UtilisateurTable.code_client, { onDelete: "cascade" }),
     montant: integer("montant").notNull(),
-    livreurNom: text("livrer_par")
+    livreurNom: integer("livrer_par")
       .notNull()
-      .references(() => livreurTable.nomComplet),
+      .references(() => livreurTable.id),
     DemandeAt: timestamp("demander_a").notNull().defaultNow(),
     status: varchar("status", { length: 20 }).notNull().default("non payé"),
   },
@@ -99,7 +99,7 @@ export const accountTable = pgTable("account", {
   idToken: text("id_token"),
   accessTokenExpiresAt: timestamp("access_token_expires_at"),
   refreshTokenExpiresAt: timestamp("refresh_token_expires_at"),
-  password: text("password"),
+  password: text("password").notNull(),
   createdAt: timestamp("created_at").notNull().defaultNow(),
   updatedAt: timestamp("updated_at").notNull(),
 });
