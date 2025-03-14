@@ -1,20 +1,20 @@
-'use client';
+"use client";
 
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Card,
   CardContent,
   CardHeader,
   CardTitle,
-  CardFooter
-} from '@/components/ui/card';
-import { Loader2, PlusCircle } from 'lucide-react';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Label } from '@/components/ui/label';
-import { use, useActionState } from 'react';
-import { inviteTeamMember } from '@/app/(login)/actions';
-import { useUser } from '@/lib/auth';
+  CardFooter,
+} from "@/components/ui/card";
+import { Loader2, PlusCircle } from "lucide-react";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { use, useActionState } from "react";
+import { inviteTeamMember } from "@/app/(login)/actions";
+import { useUser } from "@/lib/auth";
 
 type ActionState = {
   error?: string;
@@ -24,11 +24,11 @@ type ActionState = {
 export function InviteTeamMember() {
   const { userPromise } = useUser();
   const user = use(userPromise);
-  const isOwner = user?.role === 'owner';
+  // const isOwner = user?.role === 'owner';
   const [inviteState, inviteAction, isInvitePending] = useActionState<
     ActionState,
     FormData
-  >(inviteTeamMember, { error: '', success: '' });
+  >(inviteTeamMember, { error: "", success: "" });
 
   return (
     <Card>
@@ -45,7 +45,7 @@ export function InviteTeamMember() {
               type="email"
               placeholder="Enter email"
               required
-              disabled={!isOwner}
+              //disabled={!isOwner}
             />
           </div>
           <div>
@@ -54,7 +54,7 @@ export function InviteTeamMember() {
               defaultValue="member"
               name="role"
               className="flex space-x-4"
-              disabled={!isOwner}
+              //disabled={!isOwner}
             >
               <div className="flex items-center space-x-2">
                 <RadioGroupItem value="member" id="member" />
@@ -75,7 +75,7 @@ export function InviteTeamMember() {
           <Button
             type="submit"
             className="bg-orange-500 hover:bg-orange-600 text-white"
-            disabled={isInvitePending || !isOwner}
+            // disabled={isInvitePending || !isOwner}
           >
             {isInvitePending ? (
               <>
@@ -91,13 +91,13 @@ export function InviteTeamMember() {
           </Button>
         </form>
       </CardContent>
-      {!isOwner && (
+      {/*!isOwner && (
         <CardFooter>
           <p className="text-sm text-muted-foreground">
             You must be a team owner to invite new members.
           </p>
         </CardFooter>
-      )}
+      )*/}
     </Card>
   );
 }

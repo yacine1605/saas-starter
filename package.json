@@ -26,6 +26,7 @@
     "@types/react-dom": "19.0.4",
     "autoprefixer": "^10.4.20",
     "bcryptjs": "^3.0.2",
+    "better-auth": "^1.1.21",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "dotenv": "^16.4.7",
@@ -33,7 +34,9 @@
     "drizzle-orm": "^0.40.0",
     "jose": "^6.0.8",
     "lucide-react": "^0.479.0",
-    "next": "15.2.2-canary.3",
+    "next": "15.2.2",
+    "nodemailer": "^6.10.0",
+    "pg": "^8.13.3",
     "postcss": "^8.5.3",
     "postgres": "^3.4.5",
     "react": "19.0.0",
@@ -45,9 +48,6 @@
     "tailwindcss-animate": "^1.0.7",
     "tailwindcss-react-aria-components": "2.0.0",
     "typescript": "^5.8.2",
-    "zod": "^3.24.2",
-    "nodemailer": "^6.10.0",
-    "pg": "^8.13.3",
-    "better-auth": "^1.1.21"
+    "zod": "^3.24.2"
   }
 }
