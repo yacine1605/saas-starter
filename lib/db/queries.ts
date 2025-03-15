@@ -1,4 +1,4 @@
-import { desc, and, eq, isNull } from "drizzle-orm";
+import { and, eq, isNull } from "drizzle-orm";
 import { db } from "./drizzle";
 import { UtilisateurTable } from "./schema";
 import { cookies } from "next/headers";
@@ -14,7 +14,7 @@ export async function getUser() {
   if (
     !sessionData ||
     !sessionData.user ||
-    typeof sessionData.user.id !== "number"
+    typeof sessionData.user.id !== "string"
   ) {
     return null;
   }
@@ -28,7 +28,7 @@ export async function getUser() {
     .from(UtilisateurTable)
     .where(
       and(
-        eq(UtilisateurTable.id, sessionData.user.id),
+        eq(UtilisateurTable.code_client, sessionData.user.id),
         isNull(UtilisateurTable.deletedAt)
       )
     )
