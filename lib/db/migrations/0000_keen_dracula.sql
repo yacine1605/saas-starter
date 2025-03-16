@@ -1,3 +1,4 @@
+CREATE TYPE "public"."status" AS ENUM('non payé', 'payed');--> statement-breakpoint
 CREATE ROLE "admin_role";--> statement-breakpoint
 CREATE ROLE "web_insert";--> statement-breakpoint
 CREATE TABLE "admin" (
@@ -39,17 +40,17 @@ CREATE TABLE "account" (
 );
 --> statement-breakpoint
 CREATE TABLE "factures" (
-	"id" integer PRIMARY KEY NOT NULL,
+	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "factures_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
 	"client_code" text NOT NULL,
-	"montant" integer NOT NULL,
+	"montant" numeric NOT NULL,
 	"livrer_par" integer NOT NULL,
 	"demander_a" timestamp DEFAULT now() NOT NULL,
-	"status" varchar(20) DEFAULT 'non payé' NOT NULL,
+	"status" "status" DEFAULT 'non payé',
 	CONSTRAINT "montant" CHECK ("factures"."montant" > 0)
 );
 --> statement-breakpoint
 CREATE TABLE "livreur" (
-	"id" integer PRIMARY KEY NOT NULL,
+	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "livreur_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
 	"nomComplet" text NOT NULL,
 	"phone" text NOT NULL,
 	CONSTRAINT "livreur_phone_unique" UNIQUE("phone")

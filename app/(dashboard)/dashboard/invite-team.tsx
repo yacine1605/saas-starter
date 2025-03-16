@@ -33,7 +33,7 @@ export function InviteTeamMember() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Invite Team Member</CardTitle>
+        <CardTitle>Demande de paiement du facture</CardTitle>
       </CardHeader>
       <CardContent>
         <form action={inviteAction} className="space-y-4">
@@ -59,19 +59,40 @@ export function InviteTeamMember() {
           </div>
           <div>
             <Label
-              htmlFor="code_client"
+              htmlFor="num_avis"
               className="block text-sm font-medium text-gray-700"
             >
-              Code client
+              Numéro d'avis
+            </Label>
+            <div className="mt-1">
+              <Input
+                id="num_avis"
+                name="num_avis"
+                type="num_avis"
+                //autoComplete="code_client"
+                //defaultValue={state.code_client}
+                maxLength={9}
+                className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 "
+                placeholder="Entrez votre numéro d'avis"
+              />
+            </div>
+          </div>
+          <div>
+            <Label
+              htmlFor="montant"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Montant
             </Label>
             <div className="mt-1">
               <Input
                 id="montant"
                 name="montant"
                 type="number"
+                step="0.01"
                 //autoComplete="code_client"
                 //defaultValue={state.code_client}
-                maxLength={9}
+                maxLength={10}
                 className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 "
                 placeholder="Entrez votre le montant de la facture "
               />

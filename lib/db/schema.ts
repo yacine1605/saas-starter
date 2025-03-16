@@ -10,19 +10,12 @@ import {
   varchar,
   check,
   type AnyPgColumn,
+  real,
+  decimal,
+  pgEnum,
 } from "drizzle-orm/pg-core";
 import { relations } from "drizzle-orm";
 
-//export const users = pgTable("users", {
-//  id: integer("id").primaryKey(),
-//  name: varchar("name", { length: 100 }),
-//  email: varchar("email", { length: 255 }).notNull().unique(),
-//  passwordHash: text("password_hash").notNull(),
-//  role: varchar("role", { length: 20 }).notNull().default("member"),
-//  createdAt: timestamp("created_at").notNull().defaultNow(),
-//  updatedAt: timestamp("updated_at").notNull().defaultNow(),
-//  deletedAt: timestamp("deleted_at"),
-//});
 export const admin_role = pgRole("admin_role");
 export const web_insert = pgRole("web_insert");
 
@@ -67,23 +60,27 @@ export const sessionsUtilisateur = pgTable("sessions", {
   userAgent: text("user_agent"),
 });
 export const livreurTable = pgTable("livreur", {
-  id: integer("id").primaryKey(),
+  id: integer().generatedAlwaysAsIdentity().primaryKey(),
   nomComplet: text().notNull(),
   phone: text().notNull().unique(),
 });
+
+export const statusEnum = pgEnum("status", ["non payé", "payed"]);
+
 export const facturesTable = pgTable(
   "factures",
   {
-    id: integer("id").primaryKey(),
+    id: integer().generatedAlwaysAsIdentity().primaryKey(),
     utiliateurId: text("client_code")
       .notNull()
       .references(() => UtilisateurTable.code_client, { onDelete: "cascade" }),
-    montant: integer("montant").notNull(),
+    montant: decimal("montant").notNull(),
     livreurNom: integer("livrer_par")
       .notNull()
       .references(() => livreurTable.id),
     DemandeAt: timestamp("demander_a").notNull().defaultNow(),
-    status: varchar("status", { length: 20 }).notNull().default("non payé"),
+    num_avis: integer().notNull(),
+    status: statusEnum().default("non payé"),
   },
   (table) => [check("montant", sql`${table.montant} > 0`)]
 );
@@ -161,6 +158,9 @@ export const accountAdminTable = pgTable("account", {
  */
 export const UtilisateurRelation = relations(UtilisateurTable, ({ many }) => ({
   factures_demander: many(facturesTable),
+}));
+export const livreurRelations = relations(livreurTable, ({ many }) => ({
+  factures: many(facturesTable),
 }));
 export const FacturesRelations = relations(facturesTable, ({ one }) => ({
   team: one(UtilisateurTable, {

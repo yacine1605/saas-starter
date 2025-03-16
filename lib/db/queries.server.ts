@@ -1,6 +1,6 @@
-import { and, eq, isNull } from "drizzle-orm";
+import { and, eq, desc, isNull } from "drizzle-orm";
 import { db } from "./drizzle";
-import { UtilisateurTable } from "./schema";
+import { facturesTable, livreurTable, UtilisateurTable } from "./schema";
 import { cookies } from "next/headers";
 import { verifyToken } from "@/lib/auth/session";
 
@@ -88,18 +88,22 @@ export async function getActivityLogs() {
   if (!user) {
     throw new Error("User not authenticated");
   }
+  const FacturesUser = await db
+    .select({
+      id: facturesTable.id,
+      montant: facturesTable.montant,
+      status: facturesTable.status,
+      date: facturesTable.DemandeAt,
+    })
+    .from(facturesTable)
+    .leftJoin(livreurTable, eq(facturesTable.livreurNom, livreurTable.id))
+    .leftJoin(
+      UtilisateurTable,
+      eq(facturesTable.utiliateurId, user.code_client)
+    ) // Ajout du join manquant
+    .where(eq(facturesTable.utiliateurId, user.code_client))
+    .orderBy(desc(facturesTable.DemandeAt))
+    .limit(5);
 
-  //return await db
-  //  .select({
-  //    id: activityLogs.id,
-  //    action: activityLogs.action,
-  //    timestamp: activityLogs.timestamp,
-  //    ipAddress: activityLogs.ipAddress,
-  //    userName: users.name,
-  //  })
-  //  .from(activityLogs)
-  //  .leftJoin(users, eq(activityLogs.userId, users.id))
-  //  .where(eq(activityLogs.userId, user.id))
-  //  .orderBy(desc(activityLogs.timestamp))
-  //  .limit(10);
+  return FacturesUser;
 }

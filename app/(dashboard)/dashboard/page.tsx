@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 import { Settings } from "./settings";
-import { getUser } from "@/lib/db/queries";
+import { getUser } from "@/lib/db/queries.server";
 
 export default async function SettingsPage() {
   const user = await getUser();

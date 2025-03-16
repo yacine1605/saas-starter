@@ -13,7 +13,7 @@ import { comparePasswords, hashPassword, setSession } from "@/lib/auth/session";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 //import { createCheckoutSession } from "@/lib/payments/stripe";
-import { getUser } from "@/lib/db/queries";
+import { getUser } from "@/lib/db/queries.server";
 import {
   validatedAction,
   validatedActionWithUser,
@@ -316,15 +316,16 @@ const removeTeamMemberSchema = z.object({
 //);
 
 const inviteTeamMemberSchema = z.object({
-  montant: z.number().int().positive("montant invalide"),
-
-  livreurNom: z.number().int().positive("livreur invalide"),
+  montant: z.string().regex(/^\d+\.\d{2}$/, {
+    message: "Veuillez entrer un montant valide.",
+  }),
+  num_avis: z.number().int().positive(),
 });
 
 export const inviteTeamMember = validatedActionWithUser(
   inviteTeamMemberSchema,
   async (data, _, user) => {
-    const { montant } = data;
+    const { num_avis, montant } = data;
     //const userWithTeam = await getUserWithTeam(user.id);
 
     //if (!userWithTeam?.teamId) {
@@ -345,21 +346,21 @@ export const inviteTeamMember = validatedActionWithUser(
     //}
 
     //Check if there's an existing invitation
-    const existingInvitation = await db
-      .select()
-      .from(facturesTable)
-      .where(and(eq(facturesTable.status, "non payé")))
-      .limit(1);
-
-    if (existingInvitation.length > 0) {
-      return { error: "An invitation has already been sent to this email" };
-    }
+    //const existingInvitation = await db
+    //  .select()
+    //  .from(facturesTable)
+    //  .where(and(eq(facturesTable.status, "non payé")))
+    //  .limit(1);
+    //
+    //if (existingInvitation.length > 0) {
+    //  return { error: "An invitation has already been sent to this email" };
+    //}
 
     // Create a new invitation
     await db.insert(facturesTable).values({
-      id: 1,
       utiliateurId: user.code_client,
       montant,
+      num_avis,
       livreurNom: 1,
     });
 

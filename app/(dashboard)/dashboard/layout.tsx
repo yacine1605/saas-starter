@@ -16,8 +16,8 @@ export default function DashboardLayout({
 
   const navItems = [
     { href: "/dashboard", icon: Users, label: "Accueil" },
-    { href: "/dashboard/general", icon: Settings, label: "General" },
-    { href: "/dashboard/activity", icon: Activity, label: "Factuer" },
+    { href: "/dashboard/general", icon: Settings, label: "Générale" },
+    { href: "/dashboard/activity", icon: Activity, label: "Factures" },
     { href: "/dashboard/security", icon: Shield, label: "Paramètre" },
   ];
 
@@ -34,7 +34,7 @@ export default function DashboardLayout({
           onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         >
           <Menu className="h-6 w-6" />
-          <span className="sr-only">Toggle sidebar</span>
+          <span className="sr-only">sidebar</span>
         </Button>
       </div>
 

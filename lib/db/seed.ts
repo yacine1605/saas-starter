@@ -1,5 +1,5 @@
 import { db } from "./drizzle";
-import { accountTable, UtilisateurTable } from "./schema";
+import { accountTable, livreurTable, UtilisateurTable } from "./schema";
 import { hashPassword } from "@/lib/auth/session";
 
 //async function createStripeProducts() {
@@ -37,7 +37,22 @@ import { hashPassword } from "@/lib/auth/session";
 //
 //  console.log('Stripe products and prices created successfully.');
 //}
+const livreurSeed = async () => {
+  const id = 1;
+  const nomComplet = "bouiez hhhzd";
+  const phone = "7894561238";
 
+  const [livreur] = await db
+    .insert(livreurTable)
+    .values([
+      {
+        nomComplet,
+        phone,
+      },
+    ])
+    .returning();
+  console.log("Initial livreur created.", livreur);
+};
 async function seed() {
   const email = "test2@test.com";
   const password = "admin123";
@@ -74,7 +89,7 @@ async function seed() {
   //     password: passwordHash,
   //   })
   //   .returning();
-  //
+
   // //await db.insert(teamMembers).values({
   // //  teamId: team.id,
   // //  userId: user.id,
@@ -83,7 +98,8 @@ async function seed() {
   // await createStripeProducts();
 }
 
-seed()
+seed();
+livreurSeed()
   .catch((error) => {
     console.error("Seed process failed:", error);
     process.exit(1);

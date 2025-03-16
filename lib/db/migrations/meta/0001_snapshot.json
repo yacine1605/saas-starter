@@ -1,6 +1,6 @@
 {
-  "id": "c43f19b5-6e9a-4a36-84a1-29223555dc8f",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "36013d05-8d6f-4f7f-9693-a4ad56e4d51f",
+  "prevId": "c43f19b5-6e9a-4a36-84a1-29223555dc8f",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
@@ -323,6 +323,12 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
+        },
+        "num_avis": {
+          "name": "num_avis",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true
         },
         "status": {
           "name": "status",
