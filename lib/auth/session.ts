@@ -1,7 +1,7 @@
 import { compare, hash } from "bcryptjs";
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
-import { NvUser } from "@/lib/db/schema";
+import { NvaAdmin, NvUser } from "@/lib/db/schema";
 
 const key = new TextEncoder().encode(process.env.AUTH_SECRET);
 const SALT_ROUNDS = 10;
@@ -18,6 +18,10 @@ export async function comparePasswords(
 }
 
 type SessionData = {
+  user: { id: string };
+  expires: string;
+};
+type SessionDataAdmin = {
   user: { id: string };
   expires: string;
 };
@@ -47,6 +51,20 @@ export async function setSession(user: NvUser) {
   const expiresInOneDay = new Date(Date.now() + 24 * 60 * 60 * 1000);
   const session: SessionData = {
     user: { id: user.code_client! },
+    expires: expiresInOneDay.toISOString(),
+  };
+  const encryptedSession = await signToken(session);
+  (await cookies()).set("session", encryptedSession, {
+    expires: expiresInOneDay,
+    httpOnly: true,
+    secure: true,
+    sameSite: "lax",
+  });
+}
+export async function setSessionAdmin(admin: NvaAdmin) {
+  const expiresInOneDay = new Date(Date.now() + 24 * 60 * 60 * 1000);
+  const session: SessionDataAdmin = {
+    user: { id: admin.email! },
     expires: expiresInOneDay.toISOString(),
   };
   const encryptedSession = await signToken(session);

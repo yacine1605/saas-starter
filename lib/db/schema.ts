@@ -118,6 +118,7 @@ export const lower = (email: AnyPgColumn): SQL => {
 
 export type User = typeof UtilisateurTable.$inferSelect;
 export type NvUser = typeof UtilisateurTable.$inferInsert;
+export type NvaAdmin = typeof AdminTable.$inferInsert;
 export type Livreur = typeof livreurTable.$inferSelect;
 export type NvLivreur = typeof livreurTable.$inferInsert;
 export type NvAccount = typeof accountTable.$inferInsert;
