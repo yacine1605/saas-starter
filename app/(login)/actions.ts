@@ -38,7 +38,7 @@ import {
 //}
 
 const signInSchema = z.object({
-  email: z.string().email().min(3).max(255),
+  email: z.string().email("Email invalide ").min(3).max(255),
   password: z.string().min(8).max(100),
 });
 
@@ -57,7 +57,7 @@ export const signIn = validatedAction(signInSchema, async (data, formData) => {
 
   if (userWithTeam.length === 0) {
     return {
-      error: "Invalid email or password. Please try again.",
+      error: " email ou mot de passe .Essay other time.",
       email,
       password,
     };
@@ -90,15 +90,17 @@ export const signIn = validatedAction(signInSchema, async (data, formData) => {
 });
 
 const signUpSchema = z.object({
-  nom: z.string().min(1),
+  nom: z.string().min(2),
   email: z.string().email(),
-  commune: z.string().min(1),
-  ilot: z.string().min(1),
-  phone: z.string().min(1),
-  adresse: z.string().min(1),
-  code_client: z.string().min(1),
+  adresse: z.string().min(5),
+  commune: z.string().min(2),
+  ilot: z.string().min(2),
+  phone: z.string(),
+  code_client: z.string(),
   password: z.string().min(8),
-  inviteId: z.string().optional(),
+  createdAt: z.string().optional(),
+  updatedAt: z.string().optional(),
+  deletedAt: z.string().optional(),
 });
 
 export const signUp = validatedAction(signUpSchema, async (data, formData) => {
@@ -116,11 +118,15 @@ export const signUp = validatedAction(signUpSchema, async (data, formData) => {
       error: "Failed to create user. Please try again.",
       email,
       password,
+      nom,
+      commune,
+      ilot,
+      phone,
+      adresse,
+      code_client,
     };
   }
-
   const passwordHash = await hashPassword(password);
-
   const newUser: NvUser = {
     nom,
     email,
@@ -130,100 +136,28 @@ export const signUp = validatedAction(signUpSchema, async (data, formData) => {
     adresse,
     code_client,
     password: passwordHash,
-    // Default role, will be overridden if there's an invitation
   };
-
   const [createdUser] = await db
     .insert(UtilisateurTable)
     .values(newUser)
     .returning();
-
   if (!createdUser) {
     return {
-      error: "Failed to create user. Please try again.",
+      error: "failed to create user",
+      nom,
       email,
+      commune,
+      ilot,
+      phone,
+      adresse,
+      code_client,
       password,
     };
   }
+  const redirectTo = formData.get("redirect") as string | null;
+  console.log("cre", newUser);
 
-  //let teamId: number;
-  //let userRole: string;
-  // let createdTeam: typeof teams.$inferSelect | null = null;
-
-  //if (inviteId) {
-  //  // Check if there's a valid invitation
-  //  const [invitation] = await db
-  //    .select()
-  //    .from(invitations)
-  //    .where(
-  //      and(
-  //        eq(invitations.id, parseInt(inviteId)),
-  //        eq(invitations.email, email),
-  //        eq(invitations.status, "pending")
-  //      )
-  //    )
-  //    .limit(1);
-  //
-  //  if (invitation) {
-  //    teamId = invitation.teamId;
-  //    userRole = invitation.role;
-  //
-  //    await db
-  //      .update(invitations)
-  //      .set({ status: "accepted" })
-  //      .where(eq(invitations.id, invitation.id));
-  //
-  //    await logActivity(teamId, createdUser.id, ActivityType.ACCEPT_INVITATION);
-  //
-  //    [createdTeam] = await db
-  //      .select()
-  //      .from(teams)
-  //      .where(eq(teams.id, teamId))
-  //      .limit(1);
-  //  } else {
-  //    return { error: "Invalid or expired invitation.", email, password };
-  //  }
-  //} else {
-  //  // Create a new team if there's no invitation
-  //  const newTeam: NewTeam = {
-  //    name: `${email}'s Team`,
-  //  };
-  //
-  //  [createdTeam] = await db.insert(teams).values(newTeam).returning();
-  //
-  //  if (!createdTeam) {
-  //    return {
-  //      error: "Failed to create team. Please try again.",
-  //      email,
-  //      password,
-  //    };
-  //  }
-  //
-  //  teamId = createdTeam.id;
-  //  userRole = "owner";
-  //
-  //  await logActivity(teamId, createdUser.id, ActivityType.CREATE_TEAM);
-  //}
-
-  //const newTeamMember: NewTeamMember = {
-  //  userId: createdUser.id,
-  //  teamId: teamId,
-  //  role: userRole,
-  //};
-  //
-  //await Promise.all([
-  //  db.insert(teamMembers).values(newTeamMember),
-  //  logActivity(teamId, createdUser.id, ActivityType.SIGN_UP),
-  //  setSession(createdUser),
-  //]);
-  //
-  //const redirectTo = formData.get("redirect") as string | null;
-  //if (redirectTo === "checkout") {
-  //  const priceId = formData.get("priceId") as string;
-  //  return createCheckoutSession({ team: createdTeam, priceId });
-  //}
-
-  redirect("/dashboard");
+  redirect("/sign-in");
 });
 
 export async function signOut() {

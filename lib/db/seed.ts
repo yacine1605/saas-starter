@@ -39,14 +39,14 @@ import { hashPassword } from "@/lib/auth/session";
 //}
 
 async function seed() {
-  const email = "test@test.com";
+  const email = "test2@test.com";
   const password = "admin123";
   const ilot = "12";
   const nom = "yacine bouzir";
-  const phone = "1245789562";
+  const phone = "1245769562";
   const adresse = "ain benian";
   const commune = "alger";
-  const code_client = "123456789";
+  const code_client = "124456789";
   const passwordHash = await hashPassword(password);
 
   const [user] = await db
