@@ -366,6 +366,6 @@ export const inviteTeamMember = validatedActionWithUser(
     // TODO: Send invitation email and include ?inviteId={id} to sign-up URL
     // await sendInvitationEmail(email, userWithTeam.team.name, role)
 
-    return { success: "Invitation sent successfully" };
+    return { success: "Facture sent successfully" };
   }
 );

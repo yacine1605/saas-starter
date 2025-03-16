@@ -38,33 +38,44 @@ export function InviteTeamMember() {
       <CardContent>
         <form action={inviteAction} className="space-y-4">
           <div>
-            <Label htmlFor="email">Email</Label>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              placeholder="Enter email"
-              required
-              //disabled={!isOwner}
-            />
+            <Label
+              htmlFor="code_client"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Code client
+            </Label>
+            <div className="mt-1">
+              <Input
+                id="code_client"
+                name="code_client"
+                type="code_client"
+                //autoComplete="code_client"
+                //defaultValue={state.code_client}
+                maxLength={9}
+                className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 "
+                placeholder="Entrez votre code client"
+              />
+            </div>
           </div>
           <div>
-            <Label>Role</Label>
-            <RadioGroup
-              defaultValue="member"
-              name="role"
-              className="flex space-x-4"
-              //disabled={!isOwner}
+            <Label
+              htmlFor="code_client"
+              className="block text-sm font-medium text-gray-700"
             >
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="member" id="member" />
-                <Label htmlFor="member">Member</Label>
-              </div>
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="owner" id="owner" />
-                <Label htmlFor="owner">Owner</Label>
-              </div>
-            </RadioGroup>
+              Code client
+            </Label>
+            <div className="mt-1">
+              <Input
+                id="montant"
+                name="montant"
+                type="number"
+                //autoComplete="code_client"
+                //defaultValue={state.code_client}
+                maxLength={9}
+                className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 "
+                placeholder="Entrez votre le montant de la facture "
+              />
+            </div>
           </div>
           {inviteState?.error && (
             <p className="text-red-500">{inviteState.error}</p>
@@ -85,19 +96,12 @@ export function InviteTeamMember() {
             ) : (
               <>
                 <PlusCircle className="mr-2 h-4 w-4" />
-                Invite Member
+                Demande de payment
               </>
             )}
           </Button>
         </form>
       </CardContent>
-      {/*!isOwner && (
-        <CardFooter>
-          <p className="text-sm text-muted-foreground">
-            You must be a team owner to invite new members.
-          </p>
-        </CardFooter>
-      )*/}
     </Card>
   );
 }
