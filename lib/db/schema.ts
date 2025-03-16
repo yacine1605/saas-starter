@@ -79,7 +79,7 @@ export const facturesTable = pgTable(
       .notNull()
       .references(() => livreurTable.id),
     DemandeAt: timestamp("demander_a").notNull().defaultNow(),
-    num_avis: integer().notNull(),
+    num_avis: text().notNull(),
     status: statusEnum().default("non payé"),
   },
   (table) => [check("montant", sql`${table.montant} > 0`)]

@@ -1,0 +1,1 @@
+ALTER TABLE "factures" ALTER COLUMN "num_avis" SET DATA TYPE text;

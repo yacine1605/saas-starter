@@ -12,9 +12,10 @@ import {
 import { Loader2, PlusCircle } from "lucide-react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { use, useActionState } from "react";
+import { use, useActionState, useEffect } from "react";
 import { inviteTeamMember } from "@/app/(login)/actions";
 import { useUser } from "@/lib/auth";
+import { toast } from "sonner";
 
 type ActionState = {
   error?: string;
@@ -29,7 +30,27 @@ export function InviteTeamMember() {
     ActionState,
     FormData
   >(inviteTeamMember, { error: "", success: "" });
+  useEffect(() => {
+    if (inviteState.error) {
+      toast(`${inviteState.error}`, {
+        action: {
+          label: "fermer",
+          onClick: () => {},
+        },
+      });
+    }
+  }, [inviteState.error]);
 
+  useEffect(() => {
+    if (inviteState.success) {
+      toast(`${inviteState.success}`, {
+        action: {
+          label: "fermer",
+          onClick: () => {},
+        },
+      });
+    }
+  }, [inviteState.success]);
   return (
     <Card>
       <CardHeader>
@@ -98,12 +119,7 @@ export function InviteTeamMember() {
               />
             </div>
           </div>
-          {inviteState?.error && (
-            <p className="text-red-500">{inviteState.error}</p>
-          )}
-          {inviteState?.success && (
-            <p className="text-green-500">{inviteState.success}</p>
-          )}
+
           <Button
             type="submit"
             className="bg-orange-500 hover:bg-orange-600 text-white"

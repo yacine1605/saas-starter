@@ -319,43 +319,24 @@ const inviteTeamMemberSchema = z.object({
   montant: z.string().regex(/^\d+\.\d{2}$/, {
     message: "Veuillez entrer un montant valide.",
   }),
-  num_avis: z.number().int().positive(),
+  num_avis: z.string(),
 });
 
 export const inviteTeamMember = validatedActionWithUser(
   inviteTeamMemberSchema,
   async (data, _, user) => {
     const { num_avis, montant } = data;
-    //const userWithTeam = await getUserWithTeam(user.id);
-
-    //if (!userWithTeam?.teamId) {
-    //  return { error: "User is not part of a team" };
-    //}
-    //
-    //const existingMember = await db
-    //  .select()
-    //  .from(users)
-    //  .leftJoin(teamMembers, eq(users.id, teamMembers.userId))
-    //  .where(
-    //    and(eq(users.email, email), eq(teamMembers.teamId, userWithTeam.teamId))
-    //  )
-    //  .limit(1);
-    //
-    //if (existingMember.length > 0) {
-    //  return { error: "User is already a member of this team" };
-    //}
 
     //Check if there's an existing invitation
-    //const existingInvitation = await db
-    //  .select()
-    //  .from(facturesTable)
-    //  .where(and(eq(facturesTable.status, "non payé")))
-    //  .limit(1);
-    //
-    //if (existingInvitation.length > 0) {
-    //  return { error: "An invitation has already been sent to this email" };
-    //}
+    const existingInvitation = await db
+      .select()
+      .from(facturesTable)
+      .where(and(eq(facturesTable.num_avis, num_avis)))
+      .limit(1);
 
+    if (existingInvitation.length > 0) {
+      return { error: "La facture était envoyez " };
+    }
     // Create a new invitation
     await db.insert(facturesTable).values({
       utiliateurId: user.code_client,

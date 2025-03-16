@@ -86,7 +86,6 @@ const Facture_Utilisatuer_Comp = ({ FacturesQuery }: any) => {
             accessorFn: (row) => row.date,
             id: "date",
             filterFn: "fuzzy",
-
             sortingFn: fuzzySort,
             header: ({ column }) => (
               <DataTableColumnHeader column={column} title="Date" />
@@ -102,6 +101,16 @@ const Facture_Utilisatuer_Comp = ({ FacturesQuery }: any) => {
               <DataTableColumnHeader column={column} title="Status" />
             ),
 
+            footer: (props) => props.column.id,
+          },
+          {
+            accessorFn: (row) => row.num_avis,
+            id: "Numéro d'avis",
+            filterFn: "fuzzy",
+            sortingFn: fuzzySort,
+            header: ({ column }) => (
+              <DataTableColumnHeader column={column} title="Numéro d'avis" />
+            ),
             footer: (props) => props.column.id,
           },
           {

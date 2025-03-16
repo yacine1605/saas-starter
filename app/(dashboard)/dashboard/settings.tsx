@@ -12,6 +12,7 @@ type ActionState = {
   error?: string;
   success?: string;
 };
+import { Toaster } from "@/components/ui/sonner";
 
 export function Settings() {
   const getUserDisplayName = (user: Pick<User, "id" | "nom" | "email">) => {
@@ -28,6 +29,7 @@ export function Settings() {
           <InviteTeamMember />
         </CardContent>
       </Card>
+      <Toaster />
     </section>
   );
 }

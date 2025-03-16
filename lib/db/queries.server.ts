@@ -94,6 +94,7 @@ export async function getActivityLogs() {
       montant: facturesTable.montant,
       status: facturesTable.status,
       date: facturesTable.DemandeAt,
+      num_avis: facturesTable.num_avis,
     })
     .from(facturesTable)
     .leftJoin(livreurTable, eq(facturesTable.livreurNom, livreurTable.id))

@@ -15,6 +15,13 @@
       "when": 1742163888686,
       "tag": "0001_striped_slipstream",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1742164676427,
+      "tag": "0002_grey_human_cannonball",
+      "breakpoints": true
     }
   ]
 }
