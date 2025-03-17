@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { User } from "@/lib/db/schema";
-import { getUser } from "@/lib/db/queries.server";
+import { Admin, User } from "@/lib/db/schema";
+import { getAdmin, getUser } from "@/lib/db/queries.server";
 import { redirect } from "next/navigation";
 
 export type ActionState = {
@@ -52,7 +52,30 @@ export function validatedActionWithUser<S extends z.ZodType<any, any>, T>(
     return action(result.data, formData, user);
   };
 }
+type ValidatedActionWithAdminFunction<S extends z.ZodType<any, any>, T> = (
+  data: z.infer<S>,
+  formData: FormData,
+  admin: Admin
+) => Promise<T>;
 
+export function validatedActionWithAdmin<S extends z.ZodType<any, any>, T>(
+  schema: S,
+  action: ValidatedActionWithAdminFunction<S, T>
+) {
+  return async (prevState: ActionState, formData: FormData): Promise<T> => {
+    const admin = await getAdmin();
+    if (!admin) {
+      throw new Error("admin is not authenticated");
+    }
+
+    const result = schema.safeParse(Object.fromEntries(formData));
+    if (!result.success) {
+      return { error: result.error.errors[0].message } as T;
+    }
+
+    return action(result.data, formData, admin);
+  };
+}
 //type ActionWithTeamFunction<T> = (
 //  formData: FormData,
 //  team: TeamDataWithMembers

@@ -1,6 +1,11 @@
 import { and, eq, desc, isNull } from "drizzle-orm";
 import { db } from "./drizzle";
-import { facturesTable, livreurTable, UtilisateurTable } from "./schema";
+import {
+  AdminTable,
+  facturesTable,
+  livreurTable,
+  UtilisateurTable,
+} from "./schema";
 import { cookies } from "next/headers";
 import { verifyToken } from "@/lib/auth/session";
 
@@ -40,7 +45,42 @@ export async function getUser() {
 
   return user[0];
 }
+export async function getAdmin() {
+  const sessionCookie = (await cookies()).get("session");
+  if (!sessionCookie || !sessionCookie.value) {
+    return null;
+  }
 
+  const sessionData = await verifyToken(sessionCookie.value);
+  if (
+    !sessionData ||
+    !sessionData.user ||
+    typeof sessionData.user.id !== "number"
+  ) {
+    return null;
+  }
+
+  if (new Date(sessionData.expires) < new Date()) {
+    return null;
+  }
+
+  const admin = await db
+    .select()
+    .from(AdminTable)
+    .where(
+      and(
+        eq(AdminTable.id, sessionData.user.id),
+        isNull(UtilisateurTable.deletedAt)
+      )
+    )
+    .limit(1);
+
+  if (admin.length === 0) {
+    return null;
+  }
+
+  return admin[0];
+}
 //export async function getTeamByStripeCustomerId(customerId: string) {
 //  const result = await db
 //    .select()
@@ -108,3 +148,74 @@ export async function getActivityLogs() {
 
   return FacturesUser;
 }
+export async function GetAllFactures() {
+  const user = await getAdmin();
+  if (!user) {
+    throw new Error("User not authenticated");
+  }
+  const FacturesUser = await db
+    .select({
+      id: facturesTable.id,
+      montant: facturesTable.montant,
+      status: facturesTable.status,
+      date: facturesTable.DemandeAt,
+      num_avis: facturesTable.num_avis,
+      code_client: facturesTable.utiliateurId,
+    })
+    .from(facturesTable)
+    .leftJoin(livreurTable, eq(facturesTable.livreurNom, livreurTable.id))
+    //.leftJoin(
+    //  UtilisateurTable,
+    //  eq(facturesTable.utiliateurId, user.code_client)
+    //) // Ajout du join manquant
+    //.where(eq(facturesTable.utiliateurId, user.code_client))
+    .orderBy(desc(facturesTable.DemandeAt))
+    .limit(5);
+
+  return FacturesUser;
+}
+
+export const getAllUtilisateur = async () => {
+  const user = await getAdmin();
+  if (!user) {
+    throw new Error("User not authenticated");
+  }
+  //const { id, phone, nomComplet } = data;
+
+  const existUser = await db
+    .select()
+    .from(UtilisateurTable)
+    //.where(and(eq(livreurTable.id, id)))
+    .limit(1);
+
+  if (existUser.length < 0) {
+    return { error: "Le livreur n'existe pas " };
+  }
+  await db
+    .select()
+    .from(UtilisateurTable)
+    //.where(and(eq(livreurTable.id, id)))
+    .limit(200);
+};
+export const getAllLivreur = async () => {
+  const user = await getAdmin();
+  if (!user) {
+    throw new Error("User not authenticated");
+  }
+  //const { id, phone, nomComplet } = data;
+
+  const existLivreur = await db
+    .select()
+    .from(livreurTable)
+    //.where(and(eq(livreurTable.id, id)))
+    .limit(1);
+
+  if (existLivreur.length < 0) {
+    return { error: "Le livreur n'existe pas " };
+  }
+  await db
+    .select()
+    .from(livreurTable)
+    //.where(and(eq(livreurTable.id, id)))
+    .limit(10);
+};
