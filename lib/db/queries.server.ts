@@ -138,10 +138,10 @@ export async function getActivityLogs() {
     })
     .from(facturesTable)
     .leftJoin(livreurTable, eq(facturesTable.livreurNom, livreurTable.id))
-    .leftJoin(
-      UtilisateurTable,
-      eq(facturesTable.utiliateurId, user.code_client)
-    ) // Ajout du join manquant
+    //.leftJoin(
+    //  UtilisateurTable,
+    //  eq(facturesTable.utiliateurId, user.code_client)
+    //) // Ajout du join manquant
     .where(eq(facturesTable.utiliateurId, user.code_client))
     .orderBy(desc(facturesTable.DemandeAt))
     .limit(5);

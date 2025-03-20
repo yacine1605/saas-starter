@@ -60,26 +60,6 @@ export function InviteTeamMember() {
         <form action={inviteAction} className="space-y-4">
           <div>
             <Label
-              htmlFor="code_client"
-              className="block text-sm font-medium text-gray-700"
-            >
-              Code client
-            </Label>
-            <div className="mt-1">
-              <Input
-                id="code_client"
-                name="code_client"
-                type="code_client"
-                //autoComplete="code_client"
-                //defaultValue={state.code_client}
-                maxLength={9}
-                className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 "
-                placeholder="Entrez votre code client"
-              />
-            </div>
-          </div>
-          <div>
-            <Label
               htmlFor="num_avis"
               className="block text-sm font-medium text-gray-700"
             >
