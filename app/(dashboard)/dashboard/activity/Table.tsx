@@ -36,6 +36,7 @@ import {
   DataTablePagination,
   DataTableToolbar,
 } from "./DataTable";
+import { Badge } from "@/components/ui/badge";
 const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   // Rank the item
   const itemRank = rankItem(row.getValue(columnId), value);
@@ -100,12 +101,22 @@ const Facture_Utilisatuer_Comp = ({ FacturesQuery }: any) => {
             header: ({ column }) => (
               <DataTableColumnHeader column={column} title="Status" />
             ),
-
+            cell(props) {
+              if (props.row.original.status === "non payé") {
+                return (
+                  <Badge className="bg-red-500" variant="default">
+                    Non Payé
+                  </Badge>
+                );
+              } else {
+                return <Badge variant="default">Payé</Badge>;
+              }
+            },
             footer: (props) => props.column.id,
           },
           {
             accessorFn: (row) => row.num_avis,
-            id: "Numéro d'avis",
+            id: "num_avis",
             filterFn: "fuzzy",
             sortingFn: fuzzySort,
             header: ({ column }) => (

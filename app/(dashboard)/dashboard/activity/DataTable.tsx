@@ -95,12 +95,12 @@ export function DataTableToolbar<TData>({
         <Input
           placeholder="Filter..."
           value={
-            (table.getColumn("montant")?.getFilterValue() as string) ??
+            (table.getColumn("num_avis")?.getFilterValue() as string) ??
             (table.getColumn("date")?.getFilterValue() as string) ??
             ""
           }
           onChange={(event) =>
-            table.getColumn("montant")?.setFilterValue(event.target.value)
+            table.getColumn("num_avis")?.setFilterValue(event.target.value)
           }
           className="h-8 w-[150px] lg:w-[250px]  "
         />

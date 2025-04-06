@@ -238,7 +238,7 @@ export function Login({ mode = "signin" }: { mode?: "signin" | "signup" }) {
                   defaultValue={state.code_client}
                   maxLength={9}
                   className="appearance-none rounded-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 "
-                  placeholder="Entrez votre numéro de téléphone Ex: 0* ** ** ** **"
+                  placeholder="Entrez votre code client"
                 />
               </div>
             </div>
